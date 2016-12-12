@@ -1,10 +1,10 @@
-var path = require('path');
-var webpack = require('webpack');
+const path = require('path');
+const webpack = require('webpack');
 
-var HOST  = 'http://localhost';
-var PORT  = 8080;
-var URL   = HOST + ':' + PORT + '/';
-var _PATH = path.resolve(__dirname, 'src');
+const HOST  = 'http://localhost';
+const PORT  = 8080;
+const URL   = HOST + ':' + PORT + '/';
+const _PATH = path.resolve(__dirname, 'src');
 
 module.exports = {
     HOST: HOST,
@@ -38,7 +38,7 @@ module.exports = {
         root: [ _PATH ],
         extensions: [ '', '.js', '.jsx' ]
     },
-    node: { fs: "empty" },
+    node: { fs: 'empty' },
     plugins: [
         new webpack.HotModuleReplacementPlugin(),
         new webpack.EvalSourceMapDevToolPlugin(),
