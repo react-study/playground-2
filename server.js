@@ -12,18 +12,19 @@ var serverOptions = {
     watch: true,
     verbose: true,
     publicPath: config.URL,
-    headers: { 'Access-Control-Allow-Origin': '*' },
+    headers: { 'Access-Control-Allow-Origin': '*' },  
+    //다른 도메인끼리는 리소스를 사용할 수 없는(Cross Origin Resource Sharing) 경우를 예외 시킨다.
     historyApiFallback: true,
     stats: {
-        cached: true,
-        cachedAssets: true,
-        chunks: true,
-        chunkModules: false,
+        cached: true, //캐시사용 유무
+        cachedAssets: true,  //
+        chunks: true,  // 용량이 커질 시 분산시키는
+        chunkModules: false,  //모듈은 제외
         colors: true,
         hash: false,
-        reasons: true,
-        timings: true,
-        version: false
+        reasons: true,  //
+        timings: true,  //
+        version: false  //
     }
 };
 

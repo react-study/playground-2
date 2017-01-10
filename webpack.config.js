@@ -10,7 +10,7 @@ module.exports = {
     HOST: HOST,
     PORT: PORT,
     URL: URL,
-    devtool: 'cheap-module-eval-source-map',
+    devtool: 'cheap-module-eval-source-map', 
     context: _PATH,
     entry: {
         index: [
@@ -30,7 +30,7 @@ module.exports = {
                 test: /\.jsx?$/,
                 include: [ _PATH ],
                 exclude: [ /node_modules/ ],
-                loader: 'babel?cacheDirectory'
+                loader: 'babel'
             }
         ]
     },
@@ -40,8 +40,8 @@ module.exports = {
     },
     node: { fs: "empty" },
     plugins: [
-        new webpack.HotModuleReplacementPlugin(),
-        new webpack.EvalSourceMapDevToolPlugin(),
-        new webpack.NoErrorsPlugin()
+        new webpack.HotModuleReplacementPlugin(), 
+        new webpack.EvalSourceMapDevToolPlugin(), 
+        new webpack.NoErrorsPlugin()               
     ]
 };
