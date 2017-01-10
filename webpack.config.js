@@ -2,7 +2,7 @@ var path = require('path');
 var webpack = require('webpack');
 
 var HOST  = 'http://localhost';
-var PORT  = 8080;
+var PORT  = 3000;
 var URL   = HOST + ':' + PORT + '/';
 var _PATH = path.resolve(__dirname, 'src');
 
