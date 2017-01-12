@@ -34,6 +34,15 @@ class App extends Component {
     this.setState({ todos: newTodos });
   }
 
+  saveTodo(id, newText){
+    const newTodos = [ ...this.state.todos ];
+    const editIndex = newTodos.findIndex( v => v.id === b.id );
+    newTodos[editIndex].text = newText;
+    this.setState({
+      todos: newTodos
+    });
+  }
+
   render(){
     return (
       <div className="todo-app">
@@ -41,6 +50,7 @@ class App extends Component {
         <TodoList
           todos={ this.state.todos }
           deleteTodo={ todo => this.deleteTodo(todo) }
+          saveTodo={ (id, text) => this.saveTodo(id, text) }
         />
         <Footer />
       </div>
