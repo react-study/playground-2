@@ -15,7 +15,8 @@ class App extends Component{
                 { id: 2, text: '기본 할일2'},
                 { id: 3, text: '기본 할일3'},
                 { id: 4, text: '기본 할일4'}
-            ]
+            ],
+            editingId: null
         };
     }
 
@@ -30,19 +31,39 @@ class App extends Component{
         });
     }
 
-    deleteTodo(todo){
+    editTodo(id){
+        this.setState({ editingId: id });
+    }
+
+    saveTodo(id, newText){
         const newTodos = [...this.state.todos];
-        const deleteIndex = newTodos.findIndex(v => v.id === todo.id);
+        const editIndex = newTodos.findIndex(v => v.id === id);
+        newTodos[editIndex].text = newText;
+        this.setState({ todos : newTodos, editingId: null });
+    }
+
+    deleteTodo(id){
+        const newTodos = [...this.state.todos];
+        const deleteIndex = newTodos.findIndex(v => v.id === id);
         newTodos.splice(deleteIndex,1);
         this.setState({ todos : newTodos });
     }
 
+    cancelEdit(){
+        this.setState({ editingId: null });
+    }
+
     render(){
+        const { todos, editingId } = this.state;
         return (
             <div className="todo-app">
                 <Header addTodo={ text => this.addTodo(text) }/>
                 <TodoList
-                    todos={this.state.todos}
+                    todos={todos}
+                    saveTodo={(id, text) => this.saveTodo(id, text)}
+                    editTodo={id => this.editTodo(id)}
+                    editingId = {editingId}
+                    cancelEdit={() => this.cancelEdit()}
                     deleteTodo={todo => this.deleteTodo(todo)}
                 />
                 <Footer/>
