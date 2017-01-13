@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 
 class Footer extends Component {
     render() {
@@ -13,7 +13,7 @@ class Footer extends Component {
                         <a href="">Active</a>
                     </li>
                     <li>
-                        <a href="">Complited</a>
+                        <a href="">Completed</a>
                     </li>
                 </ul>
                 <button className="todo-delete-completed">
