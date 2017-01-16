@@ -33,7 +33,7 @@ class Todo extends Component {
                     >{text}</div>
                     <button
                         className="todo-item__destroy"
-                        onClick={() => deleteTodo(todo)}
+                        onClick={deleteTodo}
                     />
                 </div>
                 <input
