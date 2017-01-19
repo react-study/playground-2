@@ -9,9 +9,9 @@ class App extends Component{
         super();
         this.state = {
             todos: [
-                {id: 1, text : '아메리카노?'},
-                {id: 2, text : '카페라떼'},
-                {id: 3, text : '카푸치노'}
+                {id: 1, text: '아메리카노?'},
+                {id: 2, text: '카페라떼'},
+                {id: 3, text: '카푸치노'}
             ],
             editingId: null
         };
@@ -26,7 +26,7 @@ class App extends Component{
                     text
                 }
             ]
-        })
+        });
     }
     
     deleteTodo(id) {
@@ -39,7 +39,7 @@ class App extends Component{
     editTodo(id) {
         this.setState({
             editingId: id
-        })
+        });
     }
     
     saveTodo(id, newText) {
@@ -51,14 +51,32 @@ class App extends Component{
     cancelEdit() {
         this.setState({
             editingId: null
-        }) 
+        });
+    }
+    
+    toggleTodo(id) {
+        const newTodos = [...this.state.todos];
+        const toggleIndex = newTodos.findIndex(v=>v.id === id);
+        newTodos[toggleIndex].isDone = !newTodos[toggleIndex].isDone;
+        this.setState({todos : newTodos});
+    }
+    
+    toggleAll() {
+        const isAll = this.state.todos.every(v=>v.isDone);
+        const newTodos = this.state.todos.map(todo=> {
+            todo.isDone = !isAll;
+            return todo;
+        });
+        this.setState({
+            todos : newTodos
+        });
     }
     
     render() {
         const {
             todos,
             editingId
-        } = this.state
+        } = this.state;
         return (
             <div className="todo-app">
                 <Header addTodo={text => this.addTodo(text)} />
@@ -69,13 +87,13 @@ class App extends Component{
                     editTodo={(id)=>this.editTodo(id)}
                     editingId={editingId}
                     cancelEdit={()=>this.cancelEdit()}
+                    toggleTodo={(id)=>this.toggleTodo(id)}
+                    toggleAll={()=>this.toggleAll()}
                 />
                 <Footer />
             </div>
         );
     }
 }
-
-
 
 export default App;
