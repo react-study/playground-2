@@ -4,14 +4,27 @@ import Todo from './Todo';
 class TodoList extends Component {
 
     render(){
-        const todos = this.props.todos;
-        const todoList = todos.map((todo) =>
+        const {
+            todos,
+            deleteTodo,
+            editingId,
+            editTodo,
+            saveTodo,
+            cancelEdit
+        } = this.props;
+
+        const todoList = todos.map(({id, text}) =>
             <Todo
-                key={`todo#${todo.id}`}
-                text={todo.text}
-                deleteTodo={() => this.props.deleteTodo(todo)}
+                key={`todo#${id}`}
+                text={text}
+                isEditing={editingId === id}
+                editTodo={() => editTodo(id)}
+                deleteTodo={() => deleteTodo(id)}
+                saveTodo={text => saveTodo(id, text)}
+                cancelEdit={cancelEdit}
             />
         );
+
         return (
             <div className="todo-app__main">
                 <div className="toggle-all"></div>
