@@ -1,4 +1,6 @@
 import React, {Component} from 'react';
+import ClassNames from 'classnames';
+
 import Todo from './Todo';
 
 const TodoList = ({
@@ -28,10 +30,12 @@ const TodoList = ({
     return(
         <div className="todo-app__main">
             <div 
-                className={[
+                className={ClassNames(
                     'toggle-all',
-                    todos.every(todo=>todo.isDone) ? 'checked' : ''
-                ].join(' ')}
+                    {
+                        'checked' : todos.every(todo=>todo.isDone)
+                    }
+                )}
                 onClick={toggleAll}
             />
             <ul className="todo-list">

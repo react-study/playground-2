@@ -13,7 +13,8 @@ class App extends Component{
                 {id: 2, text: '카페라떼'},
                 {id: 3, text: '카푸치노'}
             ],
-            editingId: null
+            editingId: null,
+            filterName: 'all'
         };
     }
     
@@ -72,16 +73,36 @@ class App extends Component{
         });
     }
     
+    selectFilter(filter) {
+        this.setState({filterName : filter});
+    }
+    
+    deleteCompleted() {
+        const newTodos = this.state.todos.filter(v=> !v.isDone);
+        this.setState({todos : newTodos});
+    }
+    
     render() {
         const {
             todos,
-            editingId
+            editingId,
+            filterName
         } = this.state;
+        const activeLength = todos.filter(v=>!v.isDone).length;
+        const viewTodos = todos.filter(({isDone})=>{
+            if(
+                filterName === 'all'
+                || (filterName === 'active' && !isDone)
+                || (filterName === 'complited' && isDone)
+            ) return true;
+            return false;
+        });
+        const isSomeCompleted = todos.some(v=>v.isDone);
         return (
             <div className="todo-app">
                 <Header addTodo={text => this.addTodo(text)} />
                 <TodoList 
-                    todos={todos} 
+                    todos={viewTodos} 
                     deleteTodo={todo => this.deleteTodo(todo)}
                     saveTodo={(id, text) => this.saveTodo(id, text)}
                     editTodo={(id)=>this.editTodo(id)}
@@ -90,7 +111,13 @@ class App extends Component{
                     toggleTodo={(id)=>this.toggleTodo(id)}
                     toggleAll={()=>this.toggleAll()}
                 />
-                <Footer />
+                <Footer 
+                    filterName={filterName}
+                    activeLength={activeLength}
+                    isSomeCompleted={isSomeCompleted}
+                    selectFilter={filter=> this.selectFilter(filter)}
+                    deleteCompleted={() => this.deleteCompleted()}
+                />
             </div>
         );
     }
