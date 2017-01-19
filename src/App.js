@@ -14,7 +14,8 @@ class App extends Component {
                 {id: 3, text: '리코타샐러드에 봉골레 파스타'},
                 {id: 4, text: '떡순튀'}
             ],
-            editingId: null
+            editingId : null,
+            filterName : 'all'
         };
     }
     addTodo(text) {
@@ -70,11 +71,18 @@ class App extends Component {
             todos: newTodos
         });
     }
+    selectFilter(filter) {
+        this.setState({ filterName: filter });
+    }
+
     render(){
         const {
             todos,
             editingId
         } = this.state;
+        const activeLength = todos.filter(v => !v.isDone).length;
+
+
         return (
             <div className="todo-app">
                 <Header addTodo={text => this.addTodo(text)}/>
@@ -89,6 +97,9 @@ class App extends Component {
                     toggleAll={()=> this.toggleAll()}
                 />
                 <Footer />
+                <footer filterName = { filterName } activeLength = { activeLength } selectFilter = {  }>
+
+                </footer>
             </div>
         );
     }
