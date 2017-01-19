@@ -14,7 +14,7 @@ class Footer extends Component {
                     Delete Completed
                 </button>
             </div>
-        )
+        );
     }
 }
 

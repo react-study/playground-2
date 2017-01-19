@@ -16,7 +16,7 @@ class Todo extends Component {
                 </div>
                 <input type="text" className="todo-item__edit"/>
             </li>
-        )
+        );
     }
 }
 

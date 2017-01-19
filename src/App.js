@@ -12,7 +12,7 @@ class App extends React.Component {
                 {id: 1, text: '치킨?'},
                 {id: 2, text: '커피?'}
             ]
-        }
+        };
     }
     addTodo(text){
         this.setState({
@@ -40,7 +40,7 @@ class App extends React.Component {
                 />
                 <Footer />
             </div>
-        )
+        );
     }
 }
 
