@@ -1,26 +1,55 @@
 import React , { Component } from 'react';
+import classNames from 'classnames';
 
-class Footer extends Component{
-	render(){
-		return(
-			<div className="footer">
-				<span className="todo-count"></span>
-				<ul className="todo-filters">
-					<li>
-						<a href="">All</a>
-					</li>
-					<li>
-						<a href="">Active</a>
-					</li>
-					<li>
-						<a href="">Completed</a>
-					</li>
-				</ul>
+const Footer =({
+	selectFilter,
+	filterName,
+	activeLength,
+	deletedCompleted,
+	isSomeCompleted
+}) => (
+	<div className="footer">
+		<span className="todo-count">
+			<strong>{activeLength}</strong>
+			<span>{activeLength > 1 ? 'item' : 'items'}</span>
+		</span>
+		<ul className="todo-filters">
+			<li>
+				<a 
+					href="javascript:void(0)" 
+					onClick={() => selectFilter('all')}
+					className={filterName === 'all' ? 'selected' : ''}
+				>
+				All</a>
+			</li>
+			<li>
+				<a 
+					href="javascript:void(0)" 
+					onClick={() => selectFilter('active')}
+					className={filterName == 'active' ? 'selected' : ''}
+				>
+				Active</a>
+			</li>
+			<li>
+				<a
+				 	href="javascript:void(0)" 
+				 	onClick={() => selectFilter('completed')}
+				 	className={filterName === 'completed' ? 'selected' :''}
+				 >Completed</a>
+			</li>
+		</ul>
 
-				<button className="todo-delete-completed">Delete Completed</button>
-			</div>
-		)
-	}
-}
+		<button 
+			className={classNames(
+				'todo-delete-completed' , 
+				{'hidden' : !isSomeCompleted}
+				)
+			}
+			onClick={deletedCompleted}
+		>
+		Delete Completed</button>
+	</div>
+);
+	
 
 export default Footer;

@@ -1,5 +1,6 @@
 import React , { Component } from 'react';
 import Todo from './Todo';
+import classNames from 'classnames';
 
 class TodoList extends Component{
 
@@ -22,12 +23,10 @@ class TodoList extends Component{
 		return (
 			<div className="todo-app__main">
 				<div 
-					className="toggle-all"
-
-					className={[
+					className={classNames(
 						'toggle-all',
-						todos.every(todo => todo.isDone) ? 'checked' : ''
-					].join(' ')}
+						'checked' : this.props.todos.every(todo => todo.isDone)
+					)}
 				></div>
 				<ul className="todo-list">
 					{todoList}
