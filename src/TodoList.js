@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import Todo from './Todo';
 
 class TodoList extends Component {
-
     render(){
         const {
             todos,
@@ -10,24 +9,34 @@ class TodoList extends Component {
             editingId,
             editTodo,
             saveTodo,
-            cancelEdit
+            cancelEdit,
+            toggleTodo,
+            toggleAll
         } = this.props;
 
-        const todoList = todos.map(({id, text}) =>
+        const todoList = todos.map(({id, text, isDone}) =>
             <Todo
                 key={`todo#${id}`}
                 text={text}
+                isDone={isDone}
                 isEditing={editingId === id}
                 editTodo={() => editTodo(id)}
                 deleteTodo={() => deleteTodo(id)}
                 saveTodo={text => saveTodo(id, text)}
+                toggleTodo={() => toggleTodo(id)}
                 cancelEdit={cancelEdit}
             />
         );
 
         return (
             <div className="todo-app__main">
-                <div className="toggle-all"></div>
+                <div
+                    className={[
+                        'toggle-all',
+                        todos.every(todo => todo.isDone) ? 'checked' : ''
+                    ].join(' ')}
+                    onClick={toggleAll}
+                ></div>
                 <ul className="todo-list">
                     {todoList}
                 </ul>
