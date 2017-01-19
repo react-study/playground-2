@@ -5,19 +5,19 @@ import TodoList from './TodoList';
 import Footer from './Footer';
 
 class App extends Component {
-    constructor(){
+    constructor() {
         super();
         this.state = {
             todos: [
-                {id: 1, text: 'chicken and beer1'},
-                {id: 2, text: 'chicken and beer2'},
-                {id: 3, text: 'chicken and beer3'},
-                {id: 4, text: 'chicken and beer4'}
+                {id: 1, text: '치킨에 맥주 한 잔'},
+                {id: 2, text: '삼겹살에 소주 한 잔'},
+                {id: 3, text: '리코타샐러드에 봉골레 파스타'},
+                {id: 4, text: '떡순튀'}
             ],
             editingId: null
-        }
+        };
     }
-    addTodo(text){
+    addTodo(text) {
         this.setState({
             todos: [
                 ...this.state.todos, {
@@ -27,20 +27,17 @@ class App extends Component {
             ]
         });
     }
-
-    deleteTodo(todo){
+    deleteTodo(id) {
         const newTodos = [...this.state.todos];
-        const deleteIndex = newTodos.findIndex(v => v.id === todo.id);
+        const deleteIndex = newTodos.findIndex(v => v.id === id);
         newTodos.splice(deleteIndex, 1);
         this.setState({ todos: newTodos });
     }
-
-    editTodo(id){
+    editTodo(id) {
         this.setState({
             editingId: id
         });
     }
-
     saveTodo(id, newText) {
         const newTodos = [...this.state.todos];
         const editIndex = newTodos.findIndex(v => v.id === id);
@@ -50,24 +47,46 @@ class App extends Component {
             editingId: null
         });
     }
-
-    cancelEdit(){
+    cancelEdit() {
         this.setState({
             editingId: null
         });
     }
-
+    toggleTodo(id) {
+        const newTodos = [...this.state.todos];
+        const toggleIndex = newTodos.findIndex(v => v.id === id);
+        newTodos[toggleIndex].isDone = !newTodos[toggleIndex].isDone;
+        this.setState({
+            todos: newTodos
+        });
+    }
+    toggleAll() {
+        const isAll = this.state.todos.every(v => v.isDone);
+        const newTodos = this.state.todos.map(todo => {
+            todo.isDone = !isAll;
+            return todo;
+        });
+        this.setState({
+            todos: newTodos
+        });
+    }
     render(){
+        const {
+            todos,
+            editingId
+        } = this.state;
         return (
             <div className="todo-app">
-                <Header addTodo={ text => this.addTodo(text) } />
+                <Header addTodo={text => this.addTodo(text)}/>
                 <TodoList
-                    todos={ this.state.todos }
-                    deleteTodo={ todo => this.deleteTodo(todo) }
-                    saveTodo={ (id, text) => this.saveTodo(id, text) }
-                    editTodo={ id => this.editTodo(id) }
-                    editingId={ this.state.editingId }
-                    cancelEdit={ () => this.cancelEdit() }
+                    todos={todos}
+                    deleteTodo={a => this.deleteTodo(a)}
+                    saveTodo={(id, text) => this.saveTodo(id, text)}
+                    editTodo={id => this.editTodo(id)}
+                    editingId={editingId}
+                    cancelEdit={() => this.cancelEdit()}
+                    toggleTodo={id => this.toggleTodo(id)}
+                    toggleAll={()=> this.toggleAll()}
                 />
                 <Footer />
             </div>

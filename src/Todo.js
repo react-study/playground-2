@@ -1,51 +1,57 @@
 import React, { Component } from 'react';
 
 class Todo extends Component {
-    componentDidUpdate(){
-        if(this.props.isEditing){
+    componentDidUpdate() {
+        if(this.props.isEditing) {
             this.textInput.value = this.props.text;
             this.textInput.focus();
         }
     }
-
     handleKeyDown(e) {
         const text = e.target.value;
         if(!text || e.keyCode !== 13) return;
         this.props.saveTodo(text);
     }
-
     render() {
-        const text= this.props.text;
+        const {
+            text,
+            isDone,
+            isEditing,
+            editTodo,
+            deleteTodo,
+            toggleTodo,
+            cancelEdit
+        } = this.props;
         return (
-            <li
-                className={[
+            <li className={[
                 'todo-item',
-                this.props.isEditing ? 'editing' : ''
-                ].join(' ')}
-            >
-                <div className="toggle" />
+                isEditing ? 'editing' : '',
+                isDone ? ' completed' : ''
+            ].join(' ')}>
+                <div
+                    className="toggle"
+                    onClick={toggleTodo}
+                />
                 <div className="todo-item__view">
                     <div
                         className="todo-item__view__text"
-                        onDoubleClick={ this.props.editTodo }
-                    >
-                    { text }</div>
+                        onDoubleClick={editTodo}
+                    >{text}</div>
                     <button
                         className="todo-item__destroy"
-                        onClick={ this.props.deleteTodo }
-                    >
-                    </button>
+                        onClick={deleteTodo}
+                    />
                 </div>
                 <input
-                    type="text"
                     className="todo-item__edit"
+                    type="text"
                     ref={ref => { this.textInput = ref; }}
-                    onKeyDown={ e => this.handleKeyDown(e) }
-                    onBlur={ this.props.cancelEdit }
+                    onKeyDown={e => this.handleKeyDown(e)}
+                    onBlur={cancelEdit}
                 />
             </li>
         );
-  }
+    }
 }
 
 export default Todo;
