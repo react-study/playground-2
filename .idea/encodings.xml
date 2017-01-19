@@ -2,10 +2,8 @@
 <project version="4">
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/src/App.js" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/Child.js" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/Footer.js" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/Header.js" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/Parent.js" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/Todo.js" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/TodoList.js" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main.js" charset="UTF-8" />
