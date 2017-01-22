@@ -20,8 +20,8 @@ const TodoList = ({
             editTodo={() => editTodo(id)}
             deleteTodo={() => deleteTodo(id)}
             saveTodo={text => saveTodo(id, text)}
-            toggleTodo={()=> toggleTodo(id)}
             cancelEdit={cancelEdit}
+            toggleTodo={() => toggleTodo(id)}
         />
     ));
     return (
@@ -32,7 +32,7 @@ const TodoList = ({
                     todos.every(todo => todo.isDone) ? 'checked' : ''
                 ].join(' ')}
                 onClick={toggleAll}
-            />
+            ></div>
             <ul className="todo-list">
                 {todoList}
             </ul>
