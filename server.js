@@ -31,4 +31,4 @@ var server = new webpackDevServer(compiler, serverOptions);
 
 server.listen(config.PORT, function() {
     console.log('now listening ' + config.URL);
-});
+})
