@@ -15,25 +15,25 @@ class App extends Component {
                 {id:4,text: 'todo4'}
             ],
             editingId: null
-        }
+        };
     }
-    addTodo(text){
+    addTodo(text) {
         this.setState({
             todos: [
                 ...this.state.todos, {
-                    id : Date.now(),
+                    id: Date.now(),
                     text
                 }
             ]
-        })
+        });
     }
-    deleteTodo(id){
+    deleteTodo(id) {
         const newTodos = [...this.state.todos];
-        const deleteIndex = newTodos.findIndex(v=>v.id=== id);
+        const deleteIndex = newTodos.findIndex(v => v.id === id);
         newTodos.splice(deleteIndex, 1);
-        this.setState({todos : newTodos });
+        this.setState({ todos: newTodos });
     }
-    editTodo(id){
+    editTodo(id) {
         this.setState({
             editingId: id
         });
@@ -43,34 +43,54 @@ class App extends Component {
         const editIndex = newTodos.findIndex(v => v.id === id);
         newTodos[editIndex].text = newText;
         this.setState({
-            todos : newTodos,
-            editingId : null
-        })
+            todos: newTodos,
+            editingId: null
+        });
     }
-    cancelEdit(){
+    cancelEdit() {
         this.setState({
-            editingId : null
-        })
+            editingId: null
+        });
+    }
+    toggleTodo(id) {
+        const newTodos = [...this.state.todos];
+        const toggleIndex = newTodos.findIndex(v => v.id === id);
+        newTodos[toggleIndex].isDone = !newTodos[toggleIndex].isDone;
+        this.setState({
+            todos: newTodos
+        });
+    }
+    toggleAll() {
+        const isAll = this.state.todos.every(v => v.isDone);
+        const newTodos = this.state.todos.map(todo => {
+            todo.isDone = !isAll;
+            return todo;
+        });
+        this.setState({
+            todos: newTodos
+        });
     }
     render(){
         const {
             todos,
             editingId
-        } = this.state;
-        return(
+            } = this.state;
+        return (
             <div className="todo-app">
                 <Header addTodo={text => this.addTodo(text)}/>
                 <TodoList
                     todos={todos}
-                    deleteTodo={todo => this.deleteTodo(todo)}
-                    saveTodo = {(id,text)=> this.saveTodo(id,text)}
-                    editTodo = {id=>this.editTodo(id)}
-                    editingId = {editingId}
-                    cancelEdit = {()=>this.cancelEdit()}
+                    deleteTodo={a => this.deleteTodo(a)}
+                    saveTodo={(id, text) => this.saveTodo(id, text)}
+                    editTodo={id => this.editTodo(id)}
+                    editingId={editingId}
+                    cancelEdit={() => this.cancelEdit()}
+                    toggleTodo={id => this.toggleTodo(id)}
+                    toggleAll={()=> this.toggleAll()}
                     />
                 <Footer />
             </div>
-        )
+        );
     }
 }
 

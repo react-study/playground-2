@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
+import React, {Component } from 'react';
 
 class Footer extends Component {
     render(){
         return(
             <div className="footer">
-                <span className="todo-count">0 item left</span>
+                <span className="todo-count">0 items left</span>
                 <ul className="todo-filters">
                     <li>
                         <a href="">All</a>
@@ -20,7 +20,7 @@ class Footer extends Component {
                     Delete Completed
                 </button>
             </div>
-        )
+        );
     }
 }
 

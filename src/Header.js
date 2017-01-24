@@ -18,7 +18,7 @@ class Header extends Component {
                     onKeyDown = { e=> this.handleKeyDown(e) }
                 />
             </header>
-        )
+        );
     }
 }
 
