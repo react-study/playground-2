@@ -12,7 +12,8 @@ class App extends React.Component {
                 {id: 1, text: '치킨?'},
                 {id: 2, text: '커피?'}
             ],
-            editingId: null
+            editingId: null,
+            filterName: 'all'
         };
     }
     addTodo(text){
@@ -68,25 +69,49 @@ class App extends React.Component {
             todos: newTodos
         });
     }
+    selectFilter(filter){
+        this.setState({filterName : filter});
+    }
+    deleteCompleted(){
+        const newTodos = this.state.todos.filter(v => !v.isDone);
+        this.setState({ todos: newTodos });
+    }
     render(){
         const {
             todos,
-            editingId
+            editingId,
+            filterName
         } = this.state;
+        const activeLength = todos.filter(v => !v.isDone).length;
+        const viewTodos = todos.filter(({isDone}) => {
+            if(
+               filterName === 'all' ||
+               (filterName === 'active' && !isDone) ||
+               (filterName === 'completed' && isDone)
+           ) return true;
+            return false;
+        });
+        const isSomeCompleted = todos.some(v => v.isDone);
         return (
             <div className="todo-app">
                 <Header addTodo={text => this.addTodo(text)} />
                 <TodoList
-                    todos={ todos }
-                    deleteTodo={id => this.deleteTodo(id)}
+                    todos={ viewTodos }
                     editingId={editingId}
-                    editTodo={id => this.editTodo(id)}
+                    deleteTodo={id => this.deleteTodo(id)}
                     saveTodo={(id, text) => this.saveTodo(id, text)}
+                    editTodo={id => this.editTodo(id)}
                     cancelEdit={() => this.cancelEdit()}
                     toggleTodo={id => this.toggleTodo(id)}
                     toggleAll={()=> this.toggleAll()}
                 />
-                <Footer />
+                <Footer
+                    filterName={filterName}
+                    activeLength={activeLength}
+                    isSomeCompleted={isSomeCompleted}
+                    selectFilter={filter => this.selectFilter(filter)}
+                    deleteCompleted={()=> this.deleteCompleted()}
+                />
             </div>
         );
     }
