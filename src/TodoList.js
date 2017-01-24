@@ -15,7 +15,7 @@ class TodoList extends Component{
 				saveTodo = {(id , text) => this.props.saveTodo(id , text)}
 				toggleTodo = {() => this.props.toggleTodo(id)}
 				cancelEdit = {this.props.cancelEdit}
-				isDone = {this.props.isDone}
+				isDone = {isDone}
 
 			/>
 		));
@@ -25,7 +25,9 @@ class TodoList extends Component{
 				<div 
 					className={classNames(
 						'toggle-all',
-						'checked' : this.props.todos.every(todo => todo.isDone)
+						{
+							'checked' : this.props.todos.every(todo => todo.isDone)
+						}
 					)}
 				></div>
 				<ul className="todo-list">
