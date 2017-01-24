@@ -1,11 +1,11 @@
-var path = require('path');
-var webpack = require('webpack');
-var webpackDevServer = require('webpack-dev-server');
-var config = require('./webpack.config.js');
+const path = require('path');
+const webpack = require('webpack');
+const WebpackDevServer = require('webpack-dev-server');
+const config = require('./webpack.config.js');
 
-var compiler = webpack(config);
+const compiler = webpack(config);
 
-var serverOptions = {
+const serverOptions = {
     contentBase: path.resolve(__dirname, 'src'),
     progress: true,
     hot: true,
@@ -27,8 +27,8 @@ var serverOptions = {
     }
 };
 
-var server = new webpackDevServer(compiler, serverOptions);
+const server = new WebpackDevServer(compiler, serverOptions);
 
 server.listen(config.PORT, function() {
     console.log('now listening ' + config.URL);
-})
+});
