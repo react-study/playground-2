@@ -7,6 +7,7 @@ class Header extends React.Component {
         this.props.addTodo(val);
         e.target.value = '';
     }
+
     render(){
         return (
             <header>
