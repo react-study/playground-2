@@ -50,6 +50,24 @@ class App extends React.Component {
             editingId: null
         });
     }
+    toggleTodo(id){
+        const newTodos = [...this.state.todos];
+        const toggleIndex = newTodos.findIndex(v => v.id === id);
+        newTodos[toggleIndex].isDone = !newTodos[toggleIndex].isDone;
+        this.setState({
+            todos : [...newTodos]
+        });
+    }
+    toggleAll(){
+        const isAll = this.state.todos.every(v => v.isDone);
+        const newTodos = this.state.todos.map(todo => {
+            todo.isDone = !isAll;
+            return todo;
+        });
+        this.setState({
+            todos: newTodos
+        });
+    }
     render(){
         const {
             todos,
@@ -65,6 +83,8 @@ class App extends React.Component {
                     editTodo={id => this.editTodo(id)}
                     saveTodo={(id, text) => this.saveTodo(id, text)}
                     cancelEdit={() => this.cancelEdit()}
+                    toggleTodo={id => this.toggleTodo(id)}
+                    toggleAll={()=> this.toggleAll()}
                 />
                 <Footer />
             </div>
