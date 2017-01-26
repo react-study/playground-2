@@ -1,50 +1,84 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 
 import Header from './Header';
 import TodoList from './TodoList';
 import Footer from './Footer';
 
+const axiosApi = axios.create({
+    baseURL: 'http://localhost:2403/todos',
+    timeout: 1000,
+});
+
+const ax = ({
+    method = 'post',
+    url = '/',
+    data,
+    res,
+    err = err => { console.error(err); }
+})=> {
+    if(data) return axiosApi[method](url, data).then(res).catch(err);
+    return axiosApi[method](url).then(res).catch(err);
+};
+
 class App extends Component {
     constructor() {
         super();
         this.state = {
-            todos: [
-                {id: 1, text: '치킨에 맥주 한 잔'},
-                {id: 2, text: '삼겹살에 소주 한 잔'},
-                {id: 3, text: '리코타샐러드에 봉골레 파스타'},
-                {id: 4, text: '떡순튀'}
-            ],
+            todos: [],
             editingId: null
         };
     }
+    componentWillMount() {
+        ax({
+            method: 'get',
+            res: ({data}) => {
+                this.setState({ todos: data });
+            }
+        });
+    }
     addTodo(text) {
-        this.setState({
-            todos: [
-                ...this.state.todos, {
-                    id: Date.now(),
-                    text
-                }
-            ]
+        ax({
+            data: { text },
+            res: ({data}) => {
+                this.setState({
+                    todos: [...this.state.todos, data]
+                });
+            }
         });
     }
     deleteTodo(id) {
-        const newTodos = [...this.state.todos];
-        const deleteIndex = newTodos.findIndex(v => v.id === id);
-        newTodos.splice(deleteIndex, 1);
-        this.setState({ todos: newTodos });
+        ax({
+            method: 'delete',
+            url: `/${id}`,
+            res: () => {
+                const newTodos = [...this.state.todos];
+                const deleteIndex = newTodos.findIndex(v => v.id === id);
+                newTodos.splice(deleteIndex, 1);
+                this.setState({ todos: newTodos });
+            }
+        });
     }
     editTodo(id) {
         this.setState({
             editingId: id
         });
     }
+
     saveTodo(id, newText) {
-        const newTodos = [...this.state.todos];
-        const editIndex = newTodos.findIndex(v => v.id === id);
-        newTodos[editIndex].text = newText;
-        this.setState({
-            todos: newTodos,
-            editingId: null
+        ax({
+            method: 'put',
+            url: `/${id}`,
+            data: { text: newText },
+            res: ({data}) => {
+                const newTodos = [...this.state.todos];
+                const editIndex = newTodos.findIndex(v => v.id === id);
+                newTodos.splice(editIndex, 1, data);
+                this.setState({
+                    todos: newTodos,
+                    editingId: null
+                });
+            }
         });
     }
     cancelEdit() {
@@ -52,12 +86,21 @@ class App extends Component {
             editingId: null
         });
     }
+
     toggleTodo(id) {
-        const newTodos = [...this.state.todos];
-        const toggleIndex = newTodos.findIndex(v => v.id === id);
-        newTodos[toggleIndex].isDone = !newTodos[toggleIndex].isDone;
-        this.setState({
-            todos: newTodos
+        const isDone = this.state.todos.find(v => v.id === id).isDone;
+        ax({
+            method: 'put',
+            url: `/${id}`,
+            data: { isDone: !isDone },
+            res: ({data}) => {
+                const newTodos = [...this.state.todos];
+                const editIndex = newTodos.findIndex(v => v.id === id);
+                newTodos.splice(editIndex, 1, data);
+                this.setState({
+                    todos: newTodos
+                });
+            }
         });
     }
     toggleAll() {
@@ -70,11 +113,23 @@ class App extends Component {
             todos: newTodos
         });
     }
+
     deleteCompleted() {
+        const axp = this.state.todos
+            .filter(v => v.isDone)
+            .map(todo => ax({
+                method: 'delete',
+                url: `/${todo.id}`
+            }));
         const newTodos = this.state.todos.filter(v => !v.isDone);
-        this.setState({ todos: newTodos });
+        axios.all(axp)
+        .then(()=> {
+            this.setState({ todos: newTodos });
+        })
+        .catch(err => { console.err(err); });
     }
     render(){
+        console.log('render');
         const {
             todos,
             editingId
