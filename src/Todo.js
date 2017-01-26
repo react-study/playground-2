@@ -29,11 +29,14 @@ class Todo extends Component {
                 isEditing ? 'editing' : '',
                 isDone ? 'completed' : ''
             ].join(' ')}>
-                <div className="toggle" onClick={toggleTodo}></div>
+                <div
+                    className="toggle"
+                    onClick={toggleTodo}
+                ></div>
                 <div className="todo-item__view">
                     <div
                         className="todo-item__view__text"
-                        onDoubleClick={() => editTodo()}
+                        onDoubleClick={editTodo}
                     >
                         {text}
                     </div>

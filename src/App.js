@@ -68,25 +68,46 @@ class App extends React.Component {
             todos: newTodos
         });
     }
+    deleteCompleted(){
+        const newTodos = this.state.todos.filter(v => !v.isDone);
+        this.setState({ todos: newTodos });
+    }
     render(){
         const {
             todos,
             editingId
         } = this.state;
+        const filterName = this.props.routeParams.filter;
+
+        const activeLength = todos.filter(v => !v.isDone).length;
+        const viewTodos = todos.filter(({isDone}) => {
+            if(
+               !filterName ||
+               (filterName === 'active' && !isDone) ||
+               (filterName === 'completed' && isDone)
+           ) return true;
+            return false;
+        });
+        const isSomeCompleted = todos.some(v => v.isDone);
         return (
             <div className="todo-app">
                 <Header addTodo={text => this.addTodo(text)} />
                 <TodoList
-                    todos={ todos }
-                    deleteTodo={id => this.deleteTodo(id)}
+                    todos={ viewTodos }
                     editingId={editingId}
-                    editTodo={id => this.editTodo(id)}
+                    deleteTodo={id => this.deleteTodo(id)}
                     saveTodo={(id, text) => this.saveTodo(id, text)}
+                    editTodo={id => this.editTodo(id)}
                     cancelEdit={() => this.cancelEdit()}
                     toggleTodo={id => this.toggleTodo(id)}
                     toggleAll={() => this.toggleAll()}
                 />
-                <Footer />
+                <Footer
+                    activeLength={activeLength}
+                    isSomeCompleted={isSomeCompleted}
+                    deleteCompleted={()=> this.deleteCompleted()}
+                    filterName={filterName}
+                />
             </div>
         );
     }
