@@ -13,8 +13,7 @@ class App extends Component{
                 {id: 2, text: '카페라떼'},
                 {id: 3, text: '카푸치노'}
             ],
-            editingId: null,
-            filterName: 'all'
+            editingId: null
         };
     }
     
@@ -73,10 +72,6 @@ class App extends Component{
         });
     }
     
-    selectFilter(filter) {
-        this.setState({filterName : filter});
-    }
-    
     deleteCompleted() {
         const newTodos = this.state.todos.filter(v=> !v.isDone);
         this.setState({todos : newTodos});
@@ -85,13 +80,14 @@ class App extends Component{
     render() {
         const {
             todos,
-            editingId,
-            filterName
+            editingId
         } = this.state;
+        const filterName = this.props.routeParams.filter;
+        
         const activeLength = todos.filter(v=>!v.isDone).length;
         const viewTodos = todos.filter(({isDone})=>{
             if(
-                filterName === 'all'
+                !filterName
                 || (filterName === 'active' && !isDone)
                 || (filterName === 'complited' && isDone)
             ) return true;
