@@ -11,15 +11,12 @@ const axiosApi = axios.create({
 });
 
 const ax = ({
-    method = 'post',
+    method = 'put',
     url = '/',
-    data,
+    data = null,
     res,
     err = err => { console.error(err); }
-})=> {
-    if(data) return axiosApi[method](url, data).then(res).catch(err);
-    return axiosApi[method](url).then(res).catch(err);
-};
+})=> axiosApi[method](url, data).then(res).catch(err);
 
 class App extends Component {
     constructor() {
@@ -32,13 +29,16 @@ class App extends Component {
     componentWillMount() {
         ax({
             method: 'get',
-            res: ({data}) => {
-                this.setState({ todos: data });
+            res: ({ data }) => {
+                this.setState({
+                    todos: data
+                });
             }
         });
     }
     addTodo(text) {
         ax({
+            method: 'post',
             data: { text },
             res: ({data}) => {
                 this.setState({
@@ -67,7 +67,6 @@ class App extends Component {
 
     saveTodo(id, newText) {
         ax({
-            method: 'put',
             url: `/${id}`,
             data: { text: newText },
             res: ({data}) => {
@@ -90,7 +89,6 @@ class App extends Component {
     toggleTodo(id) {
         const isDone = this.state.todos.find(v => v.id === id).isDone;
         ax({
-            method: 'put',
             url: `/${id}`,
             data: { isDone: !isDone },
             res: ({data}) => {
@@ -105,12 +103,16 @@ class App extends Component {
     }
     toggleAll() {
         const isAll = this.state.todos.every(v => v.isDone);
-        const newTodos = this.state.todos.map(todo => {
-            todo.isDone = !isAll;
-            return todo;
-        });
-        this.setState({
-            todos: newTodos
+        const axp = this.state.todos
+            .map(todo => ax({
+                method: 'put',
+                url: `/${todo.id}`,
+                data: { isDone: !isAll }
+            }));
+        axios.all(axp).then(res => {
+            this.setState({
+                todos: res.map(res => res.data)
+            });
         });
     }
 
