@@ -1,30 +1,37 @@
-/**
- * Created by younjinkim on 2017. 1. 10..
- */
 import React, { Component } from 'react';
+import ClassNames from 'classnames';
 
-class Todo extends Component{
-    componentDidUpdate(){
-        if (this.props.isEditing) {
+class Todo extends Component {
+    componentDidUpdate() {
+        if(this.props.isEditing) {
             this.textInput.value = this.props.text;
             this.textInput.focus();
         }
     }
-
-    handleKeyDown(e){
+    handleKeyDown(e) {
         const text = e.target.value;
-        if (!text || e.keyCode !== 13) return;
+        if(!text || e.keyCode !== 13) return;
         this.props.saveTodo(text);
     }
-
-    render(){
-        const { text, editTodo, deleteTodo, cancelEdit, isEditing } = this.props;
+    render() {
+        const {
+            text,
+            isDone,
+            isEditing,
+            editTodo,
+            deleteTodo,
+            toggleTodo,
+            cancelEdit
+        } = this.props;
         return (
-            <li className={[
-                'todo-item',
-                isEditing ? 'editing' : ''
-            ].join(' ')}>
-                <div className="toggle"/>
+            <li className={ClassNames('todo-item', {
+                'editing'   : isEditing,
+                'completed' : isDone
+            })}>
+                <div
+                    className="toggle"
+                    onClick={toggleTodo}
+                />
                 <div className="todo-item__view">
                     <div
                         className="todo-item__view__text"
@@ -36,18 +43,14 @@ class Todo extends Component{
                     />
                 </div>
                 <input
-                    type="text"
                     className="todo-item__edit"
+                    type="text"
+                    ref={ref => { this.textInput = ref; }}
                     onKeyDown={e => this.handleKeyDown(e)}
                     onBlur={cancelEdit}
-                    ref={ref => {this.textInput = ref;}}
                 />
             </li>
         );
-    }
-
-    componentWillUnmount(){
-        console.log(this.props);
     }
 }
 

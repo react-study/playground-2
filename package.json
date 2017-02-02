@@ -12,11 +12,13 @@
     "start": "node ./server.js"
   },
   "devDependencies": {
+    "axios": "^0.15.3",
     "babel-core": "^6.17.0",
     "babel-loader": "^6.2.5",
     "babel-preset-latest": "^6.16.0",
     "babel-preset-react": "^6.11.1",
     "babel-preset-stage-3": "^6.17.0",
+    "classnames": "^2.2.5",
     "eslint": "^3.12.0",
     "eslint-config-airbnb": "^13.0.0",
     "eslint-plugin-import": "^2.2.0",
