@@ -350,7 +350,13 @@
       <option name="project" value="LOCAL" />
       <updated>1486037652536</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="불변성 헬퍼">
+      <created>1486037814348</created>
+      <option name="number" value="00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1486037814348</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="ToolWindowManager">
