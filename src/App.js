@@ -1,119 +1,77 @@
 import React, {Component} from 'react';
 
-import Header from './Header';
-import TodoList from './TodoList';
-import Footer from './Footer'; 
+import InputBox from './InputBox';
+import AccoutBook from './AccountBook';
 
-class App extends Component{
+class App extends Component {
     constructor() {
         super();
         this.state = {
-            todos: [
-                {id: 1, text: '아메리카노?'},
-                {id: 2, text: '카페라떼'},
-                {id: 3, text: '카푸치노'}
-            ],
-            editingId: null
+            total : 0,
+            accountBook : []
         };
     }
     
-    addTodo(text) {
+    addDeposit(deposit) {
+        const total = this.state.total + (deposit * 1);
         this.setState({
-            todos: [
-                ...this.state.todos,
+            accountBook : [
+                ...this.state.accountBook, 
                 {
-                    id: Date.now(),
-                    text
+                    deposit : Number(deposit).toLocaleString('en'),
+                    total : Number(total).toLocaleString('en')
                 }
-            ]
+            ],
+            total
         });
     }
     
-    deleteTodo(id) {
-        const newTodos = [...this.state.todos];
-        const deleteIndex = newTodos.findIndex(v=>v.id === id);
-        newTodos.splice(deleteIndex, 1);
-        this.setState({todos : newTodos});
-    }
-    
-    editTodo(id) {
+    addWithdraw(withdraw) {
+        const total = this.state.total - (withdraw * 1);
+        if(total < 0) {
+            alert('잔액이 부족합니다');
+            return;
+        }
         this.setState({
-            editingId: id
+            accountBook : [
+                ...this.state.accountBook, 
+                {
+                    withdraw : Number(withdraw).toLocaleString('en'),
+                    total : Number(total).toLocaleString('en')
+                }
+            ],
+            total
         });
-    }
-    
-    saveTodo(id, newText) {
-        const newTodos = [...this.state.todos];
-        const editIndex = newTodos.findIndex(v=>v.id === id);
-        newTodos[editIndex].text=newText;
-        this.setState({todos : newTodos, editingId: null});
-    }
-    cancelEdit() {
-        this.setState({
-            editingId: null
-        });
-    }
-    
-    toggleTodo(id) {
-        const newTodos = [...this.state.todos];
-        const toggleIndex = newTodos.findIndex(v=>v.id === id);
-        newTodos[toggleIndex].isDone = !newTodos[toggleIndex].isDone;
-        this.setState({todos : newTodos});
-    }
-    
-    toggleAll() {
-        const isAll = this.state.todos.every(v=>v.isDone);
-        const newTodos = this.state.todos.map(todo=> {
-            todo.isDone = !isAll;
-            return todo;
-        });
-        this.setState({
-            todos : newTodos
-        });
-    }
-    
-    deleteCompleted() {
-        const newTodos = this.state.todos.filter(v=> !v.isDone);
-        this.setState({todos : newTodos});
     }
     
     render() {
-        const {
-            todos,
-            editingId
-        } = this.state;
-        const filterName = this.props.routeParams.filter;
-        
-        const activeLength = todos.filter(v=>!v.isDone).length;
-        const viewTodos = todos.filter(({isDone})=>{
-            if(
-                !filterName
-                || (filterName === 'active' && !isDone)
-                || (filterName === 'complited' && isDone)
-            ) return true;
-            return false;
-        });
-        const isSomeCompleted = todos.some(v=>v.isDone);
+        const accountList = this.state.accountBook.map(({deposit, withdraw, total}, i) => (
+            <AccoutBook
+                key={i}
+                deposit={deposit}
+                withdraw={withdraw}
+                total={total}
+            />
+        ));
         return (
-            <div className="todo-app">
-                <Header addTodo={text => this.addTodo(text)} />
-                <TodoList 
-                    todos={viewTodos} 
-                    deleteTodo={todo => this.deleteTodo(todo)}
-                    saveTodo={(id, text) => this.saveTodo(id, text)}
-                    editTodo={(id)=>this.editTodo(id)}
-                    editingId={editingId}
-                    cancelEdit={()=>this.cancelEdit()}
-                    toggleTodo={(id)=>this.toggleTodo(id)}
-                    toggleAll={()=>this.toggleAll()}
+            <div>
+                <InputBox 
+                    addDeposit = {(value) => this.addDeposit(value)}
+                    addWithdraw = {(value) => this.addWithdraw(value)}
                 />
-                <Footer 
-                    filterName={filterName}
-                    activeLength={activeLength}
-                    isSomeCompleted={isSomeCompleted}
-                    selectFilter={filter=> this.selectFilter(filter)}
-                    deleteCompleted={() => this.deleteCompleted()}
-                />
+                <table>
+                    <thead>
+                        <tr>
+                            <th>입금</th>
+                            <th>출금</th>
+                            <th>잔액</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {accountList}
+                    </tbody>
+                </table>
+                
             </div>
         );
     }

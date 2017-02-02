@@ -11,6 +11,9 @@
   "scripts": {
     "start": "node ./server.js"
   },
+  "Dependencies": {
+    "axios": "^0.15.3"
+  },
   "devDependencies": {
     "babel-core": "^6.17.0",
     "babel-loader": "^6.2.5",
@@ -31,5 +34,8 @@
     "webpack": "^1.13.2",
     "webpack-dev-server": "^1.16.2",
     "webpack-hot-middleware": "^2.12.2"
+  },
+  "dependencies": {
+    "axios": "^0.15.3"
   }
 }
