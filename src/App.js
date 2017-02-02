@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import update from 'immutability-helper';
 
 import Header from './Header';
 import TodoList from './TodoList';
@@ -41,16 +42,22 @@ class App extends Component {
             method: 'post',
             data: { text },
             res: ({data}) => {
+                const newTodos = update(this.status.todos,{
+                    $push: [data]
+                });
                 this.setState({
-                    todos: [...this.state.todos, data]
+                    todos: newTodos
                 });
             }
         });
     }
     deleteTodo(id) {
         const prevTodos = this.state.todos;
-        const newTodos = [...prevTodos];
-        const deleteIndex = newTodos.findIndex(v => v.id === id);
+        const deleteIndex = prevTodos.findIndex(v => v.id === id);
+        const newTodos = update(prevTodos, {
+            $splice: [[ deleteIndex, 1]]
+        });
+
         newTodos.splice(deleteIndex, 1);
         this.setState({ todos: newTodos });
 
@@ -70,12 +77,15 @@ class App extends Component {
 
     saveTodo(id, newText) {
         const prevTodos = this.state.todos;
-        const newTodos = [...prevTodos];
-        const editIndex = newTodos.findIndex(v => v.id === id);
-        const editedItem = Object.assign({}, newTodos[editIndex], {
-            text: newText
+        const editIndex = prevTodos.findIndex(v => v.id === id);
+        const newTodos = update(prevTodos, {
+            [editIndex]: {
+                text: {
+                    $set: newText
+                }
+            }
         });
-        newTodos.splice(editIndex, 1, editedItem);
+
         this.setState({
             todos: newTodos,
             editingId: null
@@ -100,13 +110,16 @@ class App extends Component {
 
     toggleTodo(id) {
         const prevTodos = this.state.todos;
-        const newTodos = [...prevTodos];
-        const editIndex = newTodos.findIndex(v => v.id === id);
-        const newDone = !newTodos[editIndex].isDone;
-        const editedItem = Object.assign({}, newTodos[editIndex], {
-            isDone: newDone
+        const editIndex = prevTodos.findIndex(v => v.id === id);
+        const newDone = !prevTodos[editIndex].isDone;
+
+        const newTodos = update(prevTodos, {
+            [editIndex]: {
+                isDone: {
+                    $set: newDone
+                }
+            }
         });
-        newTodos.splice(editIndex, 1, editedItem);
         this.setState({ todos: newTodos });
 
         ax({
@@ -117,12 +130,18 @@ class App extends Component {
             }
         });
     }
+
     toggleAll() {
         const prevTodos = this.state.todos;
-        const isAll = prevTodos.every(v => v.isDone);
-        const newTodos = prevTodos.map(todo =>
-            Object.assign({}, todo, { isDone: !isAll })
-        );
+        const newAll = !prevTodos.every(v => v.isDone);
+
+        const newTodos = update(prevTodos, {
+            $apply: todos => todos.map(todo => {
+                todo.isDone = newAll;
+                return todo;
+            })
+        });
+
         this.setState({
             todos: newTodos
         });
@@ -137,8 +156,12 @@ class App extends Component {
 
     deleteCompleted() {
         const prevTodos = this.state.todos;
+        const newTodos = update(prevTodos, {
+            $apply: todos => todos.filter(v => !v.isDone)
+        });
+
         this.setState({
-            todos: prevTodos.filter(v => !v.isDone)
+            todos: newTodos
         });
 
         const axp = prevTodos
