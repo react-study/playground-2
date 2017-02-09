@@ -1,22 +1,18 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import InputBox from './InputBox';
-import AccountBook from './AccountBook';
+import InputBox from '../component/InputBox';
+import AccountBook from '../component/AccountBook';
+import bankAction from '../action/bank';
 
 const stateToProps = state => ({
     account: state.account
 });
 const dispatchToProps = dispatch => ({
-    save: val => dispatch({
-        type: 'SAVE_MONEY',
-        val
-    }),
-    withdraw : val => dispatch({
-        type: 'WITHDRAW_MONEY',
-        val
-    })
+    save: val => dispatch(bankAction.save(val)),
+    withdraw : val => dispatch(bankAction.withdraw(val))
 });
+
 class App extends Component{
     render(){
         const {

@@ -1,5 +1,5 @@
 import { createStore } from 'redux';
-import bankReducer from './reducer/bankReducer';
+import bankReducer from './reducer/bank';
 
 const store = createStore(
     bankReducer,
