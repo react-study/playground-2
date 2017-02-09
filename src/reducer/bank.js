@@ -1,6 +1,7 @@
 const initialState = {
     account: [],
-    total: 0
+    total: 0,
+    effect: false
 };
 
 const bankReducer = (state = initialState, action) => {
@@ -34,6 +35,18 @@ const bankReducer = (state = initialState, action) => {
             account: newAccount,
             total: newResult
         };
+    }
+
+    case 'SHOW_EFFECT': {
+        return Object.assign({}, state, {
+            effect: true
+        });
+    }
+
+    case 'HIDE_EFFECT': {
+        return Object.assign({}, state, {
+            effect: false
+        });
     }
     }
 };
