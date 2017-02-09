@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 class AccountBook extends Component {
     render() {
+        console.log(this.props.account , ' --- ' , typeof this.props.account);
         const accountData = this.props.account.map(({type, val, result}, i) => (
             <tr key={'account' + i}>
                 <td>{type === 'save' ? val : ''}</td>
