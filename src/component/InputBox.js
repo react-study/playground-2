@@ -1,3 +1,5 @@
+// src/component/InputBox.js
+
 import React, { Component } from 'react';
 
 class InputBox extends Component {
