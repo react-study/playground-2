@@ -1,9 +1,19 @@
-import {createStore} from 'redux';
+import {createStore, combineReducers, applyMiddleware, compose} from 'redux';
+import thunk from 'redux-thunk';
+
 import bankReducer from './reducer/bank';
+import tabReducer from './reducer/Taps';
 
 const store = createStore(
-    bankReducer,
-    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+    combineReducers({
+        bank : bankReducer,
+        tab : tabReducer
+    }),
+    
+    compose(
+        applyMiddleware(thunk),
+        window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+    )    
 );
 
 export default store;
