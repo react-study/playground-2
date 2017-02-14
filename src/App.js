@@ -1,15 +1,25 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import InputBox from './InputBox';
 import AccountBook from './AccountBook';
 
+const stateToProps = state => ({
+    account: state.account
+});
+
+const actionToProps = dispatch => ({
+    save: val => dispatch({
+        type: 'SAVE_MONEY',
+        val
+    }),
+    withdraw: val => dispatch({
+        type: 'WITHDRAW_MONEY',
+        val
+    })
+});
+
 class App extends Component {
-    constructor() {
-        super();
-        this.state = {
-            account: [],
-            total: 0
-        };
-    }
+    /*
     save(val) {
         val = val * 1;
         const newResult = this.state.total + val;
@@ -36,17 +46,24 @@ class App extends Component {
             total: newResult
         });
     }
+    */
     render() {
+        const {
+            account,
+            save,
+            withdraw
+        } = this.props;
+
         return (
             <div>
                 <InputBox
-                    save={val => this.save(val)}
-                    withdraw={val => this.withdraw(val)}
+                    save={val => save(val)}
+                    withdraw={val => withdraw(val)}
                 />
-                <AccountBook account={this.state.account} />
+                <AccountBook account={account} />
             </div>
         );
     }
 }
 
-export default App;
+export default connect(stateToProps, actionToProps)(App);
