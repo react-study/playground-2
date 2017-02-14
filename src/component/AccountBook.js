@@ -1,3 +1,4 @@
+
 import React, { Component } from 'react';
 
 class AccountBook extends Component {
@@ -9,8 +10,15 @@ class AccountBook extends Component {
                 <td>{result}</td>
             </tr>
         ));
+
         return (
-            <table>
+            <table style={{
+                tableLayout: 'fixed',
+                width: '100%',
+                textAlign: 'right',
+                borderCollapse: 'collapse',
+                border: '1px solid #000'
+            }}>
                 <thead>
                 <tr>
                     <th>입금</th>
@@ -25,4 +33,5 @@ class AccountBook extends Component {
         );
     }
 }
+
 export default AccountBook;
