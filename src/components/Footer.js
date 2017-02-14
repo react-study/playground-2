@@ -1,9 +1,8 @@
 import React from 'react';
-import ClassNames from 'classnames';
 import { Link } from 'react-router';
+import ClassNames from 'classnames';
 
 const Footer = ({
-    selectFilter,
     filterName,
     activeLength,
     deleteCompleted,
@@ -17,19 +16,19 @@ const Footer = ({
         </span>
         <ul className="todo-filters">
             <li>
-                <Link to="/all" className={ClassNames({
-                        'selected': !filterName
-                    })}/>All</Link>
+                <Link to="/" className={ClassNames({
+                    'selected' : !filterName
+                })}>All</Link>
             </li>
             <li>
                 <Link to="/active" className={ClassNames({
-                        'selected': filterName === 'active'
-                    })}/>Active</Link>
+                    'selected' : filterName === 'active'
+                })}>Active</Link>
             </li>
             <li>
-            <Link to="/active" className={ClassNames({
-                        'selected': filterName === 'completed'
-                    })}/>Completed</Link>
+                <Link to="/completed" className={ClassNames({
+                    'selected' : filterName === 'completed'
+                })}>Completed</Link>
             </li>
         </ul>
         <button
