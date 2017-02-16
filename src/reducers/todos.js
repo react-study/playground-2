@@ -1,83 +1,71 @@
 // reducers/todos.js
+import update from 'immutability-helper';
 
 const initialState = {
-    todos: [
-        {id: 1, text: '치킨에 맥주 한 잔'},
-        {id: 2, text: '삼겹살에 소주 한 잔'},
-        {id: 3, text: '리코타샐러드에 봉골레 파스타'},
-        {id: 4, text: '떡순튀'}
-    ],
+    todos: [],
     editingId: null
 };
 
 const todoReducer = (state = initialState, action) => {
     switch(action.type) {
-    case 'ADD_TODO':
-        return {
-            todos: [
-                ...state.todos, {
-                    id: Date.now(),
-                    text: action.text
+        case 'GET_TODOS':
+            return update(state, {
+                todos: {
+                    $set: action.todos
                 }
-            ],
-            editingId: null
-        };
-    case 'DELETE_TODO': {
-        const newTodos = [...state.todos];
-        const deleteIndex = newTodos.findIndex(v => v.id === action.id);
-        newTodos.splice(deleteIndex, 1);
-        return {
-            todos: newTodos,
-            editingId: null
-        };
-    }
-    case 'EDIT_TODO':
-        return {
-            todos: state.todos,
-            editingId: action.id
-        };
-    case 'SAVE_TODO': {
-        const newTodos = [...state.todos];
-        const editIndex = newTodos.findIndex(v => v.id === action.id);
-        newTodos[editIndex].text = action.newText;
-        return {
-            todos: newTodos,
-            editingId: null
-        };
-    }
-    case 'CANCEL_EDIT':
-        return {
-            todos: state.todos,
-            editingId: null
-        };
-    case 'TOGGLE_TODO': {
-        const newTodos = [...state.todos];
-        const toggleIndex = newTodos.findIndex(v => v.id === action.id);
-        newTodos[toggleIndex].isDone = !newTodos[toggleIndex].isDone;
-        return {
-            todos: newTodos,
-            editingId: null
-        };
-    }
-    case 'TOGGLE_ALL': {
-        const isAll = state.todos.every(v => v.isDone);
-        const newTodos = state.todos.map(todo => {
-            todo.isDone = !isAll;
-            return todo;
-        });
-        return {
-            todos: newTodos,
-            editingId: null
-        };
-    }
-    case 'DELETE_COMPLETED': {
-        const newTodos = state.todos.filter(v => !v.isDone);
-        return {
-            todos: newTodos,
-            editingId: null
-        };
-    }
-    default: return state;
+            });
+        case 'ADD_TODO':
+            return update(state, {
+                todos: {
+                    $push: [ action.newTodo ]
+                }
+            });
+        case 'DELETE_TODO':
+            return update(state, {
+                todos: {
+                    $splice: [[
+                        state.todos.findIndex(v => v.id === action.id), 1
+                    ]]
+                }
+            });
+        case 'EDIT_TODO':
+            return update(state, {
+                editingId: { $set: action.id }
+            });
+        case 'SAVE_TODO':
+            return update(state, {
+                todos: {
+                    [state.todos.findIndex(v => v.id === action.id)]: {
+                        text: { $set: action.newText }
+                    }
+                },
+                editingInd: { $set: null }
+            });
+        case 'CANCEL_EDIT':
+            return update(state, {
+                editingId: { $set: null }
+            });
+        case 'TOGGLE_TODO':
+            return update(state, {
+                todos: {
+                    [state.todos.findIndex(v => v.id === action.id)]: {
+                        isDone: { $set: action.newDone }
+                    }
+                }
+            });
+        case 'TOGGLE_ALL':
+            return update(state, {
+                todos: {
+                    $set: action.todos
+                }
+            });
+        case 'DELETE_COMPLETED':
+            return update(state, {
+                todos: {
+                    $apply: todos => todos.filter(v => !v.isDone)
+                }
+            });
+        default: return state;
     }
 };
 

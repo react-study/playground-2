@@ -22,7 +22,7 @@ const TodoList = ({
             editTodo={() => editTodo(id)}
             deleteTodo={() => deleteTodo(id)}
             saveTodo={text => saveTodo(id, text)}
-            toggleTodo={()=> toggleTodo(id)}
+            toggleTodo={()=> toggleTodo(id, !isDone)}
             cancelEdit={cancelEdit}
         />
     ));

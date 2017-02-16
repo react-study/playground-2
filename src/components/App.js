@@ -11,17 +11,21 @@ const mapStateToProps = state => ({
     editingId: state.editingId
 });
 const mapDispatchToProps = dispatch => ({
+    getTodos        : () => dispatch(TodoActions.getTodos()),
     addTodo         : text => dispatch(TodoActions.addTodo(text)),
     deleteTodo      : id => dispatch(TodoActions.deleteTodo(id)),
     editTodo        : id => dispatch(TodoActions.editTodo(id)),
     saveTodo        : (id, newText) => dispatch(TodoActions.saveTodo(id, newText)),
     cancelEdit      : () => dispatch(TodoActions.cancelEdit()),
-    toggleTodo      : id => dispatch(TodoActions.toggleTodo(id)),
-    toggleAll       : () => dispatch(TodoActions.toggleAll()),
-    deleteCompleted : () => dispatch(TodoActions.deleteCompleted())
+    toggleTodo      : (id, newDone) => dispatch(TodoActions.toggleTodo(id, newDone)),
+    toggleAll       : todos => dispatch(TodoActions.toggleAll(todos)),
+    deleteCompleted : todos => dispatch(TodoActions.deleteCompleted(todos))
 });
 
 class App extends Component {
+    componentWillMount() {
+        this.props.getTodos();
+    }
     render(){
         const {
             todos,
@@ -58,13 +62,13 @@ class App extends Component {
                     editTodo   = {editTodo}
                     cancelEdit = {cancelEdit}
                     toggleTodo = {toggleTodo}
-                    toggleAll  = {toggleAll}
+                    toggleAll  = {()=> toggleAll(todos)}
                 />
                 <Footer
                     filterName      = {filterName}
                     activeLength    = {activeLength}
                     isSomeCompleted = {isSomeCompleted}
-                    deleteCompleted = {deleteCompleted}
+                    deleteCompleted = {()=> deleteCompleted(todos)}
                 />
             </div>
         );
